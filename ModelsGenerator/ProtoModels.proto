@@ -1,0 +1,68 @@
+syntax = "proto3";
+
+message GetInventoryRequest {
+    string id = 1;
+}
+
+message Inventory {
+    string id = 1;
+    string qty = 2;
+};
+
+message InventoryUpdateResponse {
+    enum UpdateType {
+        INITIAL = 0;
+        UPDATE = 1;
+    }
+    repeated Inventory inventory = 1;
+};
+
+message OrderItemType {
+    string id = 1;
+    string qty = 2;
+}
+
+message PlaceOrderRequest {
+    string id = 1;
+    string seat = 2;    
+    repeated OrderItemType items = 3;
+}
+
+message OrderPlacedResponse {
+    enum OrderStatus {
+        PENDING = 0;
+        FAILED = 1;
+    }
+
+    OrderStatus status = 1;
+    repeated Inventory inventory = 2;
+};
+
+message Request {
+    enum RequestType {
+        GET_INVENTORY = 0;
+        PLACE_ORDER = 1;
+    }
+
+    RequestType type = 1;
+    optional GetInventoryRequest get_inventory = 2;
+    optional PlaceOrderRequest place_order = 3;
+}
+
+message Response {
+    enum ResponseType {
+        INVENTORY_UPDATE = 0;
+        ORDER_PLACED = 1;
+    }
+    ResponseType type = 1;
+    optional InventoryUpdateResponse inventory_update = 2;
+    optional OrderPlacedResponse order_placed = 3;
+}
+
+message ProductDeletedResponse {
+    enum DeleteType {
+        HARD = 0;
+        SOFT = 1;
+    }
+    repeated Inventory inventory = 1;
+};
